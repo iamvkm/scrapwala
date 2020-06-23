@@ -1,3 +1,38 @@
+<?php
+
+  if (!empty($_POST['submit'])) 
+  {
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $location = $_POST['upi'];
+    $type = $_POST['address'];
+
+    // Account details
+    $apiKey = urlencode('RJYClXWjNjs-5f6V7R6yAWZGcGVMzWbWdwdFEd5IjZ');
+
+    // Message details
+    $numbers = array(919112244355);
+    $sender = urlencode('TXTLCL');
+    $message = rawurlencode($name." ".$phone." ".$upi." ".$address);
+   
+    $numbers = implode(',', $numbers);
+   
+    // Prepare data for POST request
+    $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+   
+    // Send the POST request with cURL
+    $ch = curl_init('https://api.textlocal.in/send/');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    //echo $response;
+  }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,7 +83,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo mr-auto">
-        <h1><a href="index.html">ScrapWala</a></h1>
+        <h1><a href="index.php">ScrapWala</a></h1>
       </div>
 
       <nav class="nav-menu d-none d-lg-block">
@@ -84,18 +119,18 @@
     <div class="container text-center text-md-left" data-aos="fade-up">
         <div class="row mt-1 justify-content-center">
             <div class="col-lg-8">
-                <form action="#">
+                <form action="book.php" method="POST" role="form">
                     <div class="form-group">
-                      <input type="text" class="form-control" id="name" placeholder="Enter Name" name="email">
+                      <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
                     </div>
                     <div class="form-group">
                       <input type="tel" class="form-control" id="phone" placeholder="Enter Phone Number" name="phone">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="upi" placeholder="Enter UPI ID" name="phone">
+                        <input type="text" class="form-control" id="upi" placeholder="Enter UPI ID" name="upi">
                       </div>
                     <div class="form-group">
-                        <textarea class="form-control" rows="2" placeholder="Enter Address (within Pune)"></textarea>
+                        <textarea class="form-control" rows="2" id="address" placeholder="Enter Address (within Pune)" name="address"></textarea>
                     </div>
                     <button type="submit" class="btn btn-default btn-block" style="background-color: #28b463; text-align: center;">Submit</button>
                   </form>
